@@ -1,0 +1,14 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Commentaires{% endblock %}
+
+{% block body %}
+    <h1>Commentaires</h1>
+
+    {%  for comment in comments %}
+        {{ comment }}
+    {% endfor %}
+
+
+{% endblock %}
+

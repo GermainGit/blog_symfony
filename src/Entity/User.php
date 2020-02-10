@@ -49,6 +49,11 @@ class User
         $this->comments = new ArrayCollection();
     }
 
+    public function getUser()
+    {
+        return $this->getUsername();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -150,5 +155,10 @@ class User
         }
 
         return $this;
+    }
+
+    public function __toString() : string
+    {
+        return $this->getUsername();
     }
 }

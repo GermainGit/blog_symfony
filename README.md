@@ -32,6 +32,25 @@ Les migrations permettent de reprendre un projet et d'initialiser la base de don
 
 ---
 
-#### Faire une recherche sur les différentes solutions disponibles pour l'administration dans Symfony
+#### Travail préparatoire : Qu'est-ce que EasyAdmin ?
 
+EasyAdmin est un bundle qui permet de créer un backoffice pour administrer nos Entity.
+
+---
+
+#### Pourquoi doit-on implémenter des méthodes to string dans nos entités?
+
+---
+
+#### Qu'est-ce que le ParamResolver ?
+
+---
+
+#### Qu'est-ce qu'un formulaire Symfony ?
+
+Les formulaires Symfony sont des formulaires automatiquement générés pour notre controller grâce à la méthode `createFormBuilder`
+
+---
+
+#### Quels avantages offrent l'usage d'un formulaire ?
 
