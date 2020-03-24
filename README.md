@@ -54,3 +54,28 @@ Les formulaires Symfony sont des formulaires automatiquement générés pour not
 
 #### Quels avantages offrent l'usage d'un formulaire ?
 
+Cela permet de ne pas à avoir à créer de l'HTML répétitif pour chaque entité.
+
+---
+
+####  Définir les termes suivants : Encoder, Provider, Firewall, Access Control, Role, Voter
+
+**Firewall :**
+
+Le firewall permet de configurer la façon dont l'utilisateur va être authentifier. Est-ce qu'il va se connecter grâce à un form ? Une API ? Etc
+
+**Access_control :**
+
+Access control définit les rôles nécessaires pour atteindre certaines routes.
+
+**Encoders :** 
+
+Permet d'encoder une chaine.
+
+**Provider :**
+
+Provider permet de définir d'où viennent les utilisateurs, cela nous permet de préciser notre classe user.
+
+**Role :**
+
+Les rôles sont des rôles, ni plus ni moins...

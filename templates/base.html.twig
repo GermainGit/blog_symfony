@@ -3,9 +3,13 @@
     <head>
         <meta charset="UTF-8">
         <title>{% block title %}Welcome!{% endblock %}</title>
+        <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="/styles/main.css">
         {% block stylesheets %}{% endblock %}
     </head>
     <body>
+        {% include "layouts/header.html.twig" %}
+        <div class="padding-header"></div>
         {% block body %}{% endblock %}
         {% block javascripts %}{% endblock %}
     </body>

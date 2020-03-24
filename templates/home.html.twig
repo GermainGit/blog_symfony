@@ -1,0 +1,26 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+    <div class="container">
+        <div class="title">
+            <h1>Blog <span>Symfony</span></h1>
+        </div>
+        <div class="articles">
+            {% for post in posts|reverse %}
+                <div class="post post-{{ loop.index }}">
+                    <h2><a href="{{ path("showPost", { 'post': post.id }) }}">{{ post }}</a></h2>
+                    <p class="author">par <span>{{ post.author }}</span></p>
+                </div>
+                <style>
+                    .post-{{ loop.index }}{
+                        opacity: 0;
+                        animation: fade-in;
+                        animation-duration: 1s;
+                        animation-delay: .{{ loop.index }}s;
+                        animation-fill-mode: forwards;
+                    }
+                </style>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

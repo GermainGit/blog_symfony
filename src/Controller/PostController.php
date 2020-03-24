@@ -1,17 +1,13 @@
 <?php
 namespace App\Controller;
 
+use App\Entity\Comment;
 use App\Entity\Post;
-use App\Entity\User;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
-use http\Env\Request;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -21,7 +17,7 @@ class PostController extends AbstractController
 {
 
     /**
-     * @Route("/posts")
+     * @Route("/posts",name="indexPost")
      */
     public function index(EntityManagerInterface $em)
     {
@@ -34,22 +30,25 @@ class PostController extends AbstractController
     }
 
     /**
-     * @Route("/posts/new")
+     * @Route("/posts/new", name="newPost")
      */
-    public function create(EntityManagerInterface $em, \Symfony\Component\HttpFoundation\Request $request)
+    public function create(EntityManagerInterface $em, Request $request)
     {
+        $usr = $this->getUser();
         $post = new Post();
         $form = $this->createFormBuilder($post)
             ->add('title', TextType::class)
             ->add('content', TextType::class)
-            ->add('Author', EntityType::class, [
-                'class' => User::class,
-                'choice_label' => 'username',
-            ])
             ->add('save', SubmitType::class, ['label' => 'Publier'])
             ->getForm();
 
+
         $form->handleRequest($request);
+        $post->setCreatedAt(new \DateTime());
+        $post->setIsDeleted(false);
+        $post->setIsPublished(true);
+        $post->setAuthor($usr);
+
         if ($form->isSubmitted() && $form->isValid()) {
             $post = $form->getData();
             $em = $this->getDoctrine()->getManager();
@@ -57,7 +56,7 @@ class PostController extends AbstractController
             $em->flush();
 
 
-            return $this->redirectToRoute('task_success');
+            return $this->redirectToRoute('index');
         }
 
         return $this->render('/posts/new.html.twig', [
@@ -65,5 +64,40 @@ class PostController extends AbstractController
         ]);
     }
 
+    /**
+     * @Route("/posts/{post}", name="showPost")
+     */
+    public function show(Post $post, EntityManagerInterface $em, Request $request)
+    {
+        $usr= $this->getUser();
+        $commentRepo = $em->getRepository(Comment::class);
+        $comments = $commentRepo->findBy(['post' => $post, 'isDeleted' => false]);
 
+        $comment = new Comment();
+        $form = $this->createFormBuilder($comment)
+            ->add('content', TextType::class)
+            ->add('save', SubmitType::class, ['label' => 'Publier'])
+            ->getForm();
+
+        $form->handleRequest($request);
+        $comment->setCreatedAt(new \DateTime());
+        $comment->setIsDeleted(false);
+        $comment->setPost($post);
+        $comment->setAuthor($usr);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+            $comment = $form->getData();
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($comment);
+            $em->flush();
+        }
+        return $this->render('/posts/show.html.twig', [
+            'post' => $post,
+            'form' => $form->createView(),
+            'comments' => $comments,
+            'user' => $usr
+        ]);
+
+    }
 }

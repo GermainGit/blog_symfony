@@ -1,0 +1,38 @@
+{% extends "./base.html.twig" %}
+
+{% block body %}
+
+    <div class="container post-show">
+        <div class="title"><h1>{{ post }}</h1></div>
+        <div class="author">{{ post.author }}</div>
+    </div>
+
+    <div class="comment-container">
+        <h2>Commentaires</h2>
+        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+            {{ form(form) }}
+        {% else %}
+            <div class="need-connect">
+                <p>Vous devez être connecté pour commenter.</p>
+                <div class="links">
+                    <a href=" {{ path('app_login') }}" class="connexion">Se connecter</a>
+                    <a href=" {{ path('app_register') }}" class="inscription">S'inscrire</a>
+                </div>
+            </div>
+        {% endif %}
+        {% if comments %}
+            {% for comment in comments %}
+                <div class="comment">
+                    <a href="#">{{ comment.author }}</a>
+                    <p>{{ comment.content }}</p>
+                    {% if is_granted('IS_AUTHENTICATED_FULLY') and comment.author.id == app.user.id %}
+                        <a href="{{ path('delete_comment',  { 'comment': comment.id }) }}" class="delete">Supprimer</a>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>Pas de commentaire.</p>
+        {% endif %}
+    </div>
+
+{% endblock %}
